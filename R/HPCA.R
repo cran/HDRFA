@@ -21,7 +21,7 @@ HPCA=function(X,r,Method="E",tau=NULL,L_init=NULL,F_init=NULL,maxiter_HPCA=100,m
       for(i in 1:N){
         L_init[i,]=rlm(F_init,X[,i],maxit=maxiter_HLM)$coefficients
       }
-      L_init=Fregularize(L_init)
+      L_init=Lregularize(L_init)
     }
 
     if(is.null(L_init)){
@@ -29,7 +29,7 @@ HPCA=function(X,r,Method="E",tau=NULL,L_init=NULL,F_init=NULL,maxiter_HPCA=100,m
       for(i in 1:N){
         L_init[i,]=rlm(F_init,X[,i],maxit=maxiter_HLM)$coefficients
       }
-      L_init=Fregularize(L_init)
+      L_init=Lregularize(L_init)
     }
 
     if(is.null(F_init)){

@@ -50,7 +50,7 @@ The return value is a list. In this list, it contains the following:
 \item{m}{The number of iterations.}
 }
 \references{
-He Y, Li L, Liu D, Zhou W., (2023). Huber Principal Component Analysis for Large-dimensional Factor Models. 
+He Y, Li L, Liu D, Zhou W., (2023). Huber Principal Component Analysis for Large-dimensional Factor Models. <arXiv:2303.02817>.
 }
 \author{
 Yong He, Lingxiao Li, Dong Liu, Wenxin Zhou.
