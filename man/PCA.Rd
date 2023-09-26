@@ -29,7 +29,7 @@ The return value is a list. In this list, it contains the following:
 \item{Lhat}{The estimated loading matrix of dimension \eqn{N\times r}.}
 }
 \references{
-Bai, J., (2003). Inferential theory for factor models of large dimensions. Econometrica 71, 135–171.
+Bai, J., 2003. Inferential theory for factor models of large dimensions. Econometrica 71, 135–171.
 }
 \author{
 Yong He, Lingxiao Li, Dong Liu, Wenxin Zhou.

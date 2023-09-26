@@ -20,7 +20,7 @@ See Yu et al. (2019) for details.
 \item{rhat}{The estimated factor number.}
 }
 \references{
-Yu, L., He, Y., Zhang, X., (2019). Robust factor number specification for large-dimensional elliptical factor
+Yu, L., He, Y., Zhang, X., 2019. Robust factor number specification for large-dimensional elliptical factor
 model. Journal of Multivariate analysis 174, 104543.
 }
 \author{

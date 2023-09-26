@@ -21,7 +21,7 @@ See Ahn and Horenstein (2013) for details.
 
 }
 \references{
-Ahn, S.C., Horenstein, A.R., (2013). Eigenvalue ratio test for the number of factors. Econometrica 81,
+Ahn, S.C., Horenstein, A.R., 2013. Eigenvalue ratio test for the number of factors. Econometrica 81,
 1203–1227.
 }
 \author{

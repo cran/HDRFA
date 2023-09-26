@@ -36,9 +36,9 @@ The return value is a list. In this list, it contains the following:
 \item{t}{The number of iterations.}
 }
 \references{
-Chen, L., Dolado, J.J., Gonzalo, J., (2021). Quantile factor models. Econometrica 89, 875–910.
+Chen, L., Dolado, J.J., Gonzalo, J., 2021. Quantile factor models. Econometrica 89, 875–910.
 
-He Y, Kong X, Yu L, Zhao P., (2023). Quantile factor analysis for large-dimensional time series with statistical guarantee. <arXiv:2006.08214>.
+He Y, Kong X, Yu L, Zhao P., 2023 Quantile factor analysis for large-dimensional time series with statistical guarantee <arXiv:2006.08214>.
 }
 \author{
 Yong He, Lingxiao Li, Dong Liu, Wenxin Zhou.

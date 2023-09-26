@@ -36,7 +36,7 @@ See Chen et al. (2021) for more details.
 \item{rhat}{The estimated factor number.}
 }
 \references{
-Chen, L., Dolado, J.J., Gonzalo, J., (2021). Quantile factor models. Econometrica 89, 875–910.
+Chen, L., Dolado, J.J., Gonzalo, J., 2021. Quantile factor models. Econometrica 89, 875–910.
 }
 \author{
 Yong He, Lingxiao Li, Dong Liu, Wenxin Zhou.

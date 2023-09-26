@@ -4,15 +4,25 @@
 
 #HPCA(Method="E");IQR()
 Fregularize <- function(F){
-  Freg <- Orthogonalize(F)
+  
+  if(dim(F)[2]>1){
+    Freg <- Orthogonalize(F)
+  } else{
+    Freg <- F/sqrt(sum(F^2))
+  }
   return(Freg)
 }
 
-Lregularize <- function(L){
-  svdL  <- svd(L)
-  svdLD <- diag(svdL$d)
-  Lreg <- (svdL$u)%*%svdLD
-  return(Lreg)
+Lregularize <- function(L,r){
+  
+  if(r>1){
+    svdL  <- svd(L)
+    svdLD <- diag(svdL$d)
+    Lreg <- (svdL$u)%*%svdLD
+    return(Lreg)
+  } else{
+    return(L)
+  }
 }
 
 Orthogonalize <- function(Z){

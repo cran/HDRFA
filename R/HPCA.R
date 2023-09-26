@@ -19,25 +19,28 @@ HPCA=function(X,r,Method="E",tau=NULL,L_init=NULL,F_init=NULL,maxiter_HPCA=100,m
       F_init=PCA(X,r)$Fhat
       L_init=matrix(0,N,r)
       for(i in 1:N){
-        L_init[i,]=rlm(F_init,X[,i],maxit=maxiter_HLM)$coefficients
+        L_init[i,]=myrlm(F_init,X[,i],maxiter=maxiter_HLM)$coefficients
+        #L_init[i,]=rlm(F_init,X[,i],maxit=maxiter_HLM)$coefficients
       }
-      L_init=Lregularize(L_init)
+      L_init=Fregularize(L_init)
     }
 
     if(is.null(L_init)){
       L_init=matrix(0,N,r)
       for(i in 1:N){
-        L_init[i,]=rlm(F_init,X[,i],maxit=maxiter_HLM)$coefficients
+        L_init[i,]=myrlm(F_init,X[,i],maxiter=maxiter_HLM)$coefficients
+        #L_init[i,]=rlm(F_init,X[,i],maxit=maxiter_HLM)$coefficients
       }
-      L_init=Lregularize(L_init)
+      L_init=Fregularize(L_init)
     }
 
     if(is.null(F_init)){
       F_init=matrix(0,T,r)
       for(t in 1:T){
-        F_init[t,]=rlm(L_init,X[t,],maxit=maxiter_HLM)$coefficients
+        F_init[t,]=myrlm(L_init,X[t,],maxiter=maxiter_HLM)$coefficients
+        #F_init[t,]=rlm(L_init,X[t,],maxit=maxiter_HLM)$coefficients
       }
-      F_init=Fregularize(F_init)
+      F_init=Lregularize(F_init,r)
     }
     CC_init=F_init%*%t(L_init)
 
@@ -45,24 +48,29 @@ HPCA=function(X,r,Method="E",tau=NULL,L_init=NULL,F_init=NULL,maxiter_HPCA=100,m
     while(TRUE){
 
       for(t in 1:T){
-        F_update[t,]=rlm(L_init,X[t,],maxit=maxiter_HLM)$coefficients
+        F_update[t,]=myrlm(L_init,X[t,],maxiter=maxiter_HLM)$coefficients
+        #F_update[t,]=rlm(L_init,X[t,],maxit=maxiter_HLM)$coefficients
       }
-      F_update=Fregularize(F_update)
+      F_update=Lregularize(F_update,r)
 
       for(i in 1:N){
-        L_update[i,]=rlm(F_update,X[,i],maxit=maxiter_HLM)$coefficients
+        L_update[i,]=myrlm(F_update,X[,i],maxiter=maxiter_HLM)$coefficients
+        #L_update[i,]=rlm(F_update,X[,i],maxit=maxiter_HLM)$coefficients
       }
-      L_update=Lregularize(L_update)
+      L_update=Fregularize(L_update)
 
       CC_update=F_update%*%t(L_update)
 
       if(m>=maxiter_HPCA){
         warning(gettextf("'HPCA' failed to converge in %d steps", maxiter_HPCA))
+        
+        L_update=L_update*sqrt(N);F_update=F_update/sqrt(N)
         return(list(Fhat=F_update,Lhat=L_update,iter=m))
       }
 
       if(SC(CC_update,CC_init,eps)){
-        #F_update=Fregularize(F_update);L_update=Lregularize(L_update)
+        
+        L_update=L_update*sqrt(N);F_update=F_update/sqrt(N)
         return(list(Fhat=F_update,Lhat=L_update,iter=m))
       } else{
         L_init=L_update
@@ -143,11 +151,7 @@ HPCA_FN=function(X,rmax,Method="E",threshold=NULL,maxiter_HPCA=100,maxiter_HLM=1
   T=dimen[1];N=dimen[2]
 
   fit=HPCA(X=X,r=rmax,Method=Method,maxiter_HPCA=maxiter_HPCA,maxiter_HLM=maxiter_HLM,eps=eps)
-  if(Method=="E"){
-    VK=eigen((t(fit$Lhat)%*%fit$Lhat)/N,only.values=TRUE)$values
-  } else{
-    VK=eigen((t(fit$Fhat)%*%fit$Fhat)/T,only.values=TRUE)$values
-  }
+  VK=sort(diag((t(fit$Fhat)%*%fit$Fhat)/T),decreasing=TRUE)
   
   if(is.null(threshold)){
     threshold=VK[1]*(min(N,T))^(-1/3)

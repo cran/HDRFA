@@ -1,7 +1,6 @@
-importFrom("stats", "lm", "rnorm")
+importFrom("stats", "lm", "rnorm", "lm.wfit", "median")
 
 import(quantreg)
-import(MASS)
 import(pracma)
 
 export(HPCA)

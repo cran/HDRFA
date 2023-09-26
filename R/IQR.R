@@ -9,7 +9,7 @@ IQR <- function(X,r,tau,max_iter=100,eps=10^(-6))#X n*p T*N  n=T, p=N
   for (i in 1:p){
     L0hat[i,] <- rq(X[,i]~F0hat-1,tau=tau)$coefficients
   }
-  Lthat <- Lregularize(L0hat)
+  Lthat <- Lregularize(L0hat,r)
   Fthat <- F0hat
 
   t <- 0
@@ -23,14 +23,18 @@ IQR <- function(X,r,tau,max_iter=100,eps=10^(-6))#X n*p T*N  n=T, p=N
     for (i in 1:p){
       Lthat[i,] <- rq(X[,i]~Fthat-1,tau=tau)$coefficients
     }
-    Lthat <- Lregularize(Lthat)
+    Lthat <- Lregularize(Lthat,r)
     CC1=Lthat%*%t(Fthat)
     CCdiff=mean(abs(CC1-CC0)/abs(CC0))
     t <- t+1
     if (t==max_iter){
       warning(gettextf("'IQR' failed to converge in %d steps", max_iter))
+      
+       Fthat=Fthat*sqrt(n);Lthat=Lthat/sqrt(n)
+       return(list(Fhat=Fthat,Lhat=Lthat,t=t))
     }
   }
+  Fthat=Fthat*sqrt(n);Lthat=Lthat/sqrt(n)
   return(list(Fhat=Fthat,Lhat=Lthat,t=t))
 }
 
@@ -40,7 +44,7 @@ IQR_FN<-function(X,rmax,tau,threshold=NULL,max_iter=100,eps=10^(-6)){
   T <- nrow(X)
   rip <- IQR(X,rmax,tau,max_iter=max_iter,eps=eps)
   Lhat <- rip$Lhat
-  VK <- eigen((t(Lhat)%*%Lhat)/(N),only.values=TRUE)$values
+  VK <- sort(diag((t(Lhat )%*%Lhat )/N),decreasing=TRUE)
   if(is.null(threshold)){
     threshold<- VK[1]*(min(N,T))^(-1/3)
   }

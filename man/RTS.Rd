@@ -26,7 +26,7 @@ The return value is a list. In this list, it contains the following:
 \item{Lhat}{The estimated loading matrix of dimension \eqn{N\times r}.}
 }
 \references{
-He, Y., Kong, X., Yu, L., Zhang, X., (2022). Large-dimensional factor analysis without moment constraints.
+He, Y., Kong, X., Yu, L., Zhang, X., 2022. Large-dimensional factor analysis without moment constraints.
 Journal of Business & Economic Statistics 40, 302–312.
 }
 \author{
