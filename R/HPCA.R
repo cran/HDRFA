@@ -16,13 +16,14 @@ HPCA=function(X,r,Method="E",tau=NULL,L_init=NULL,F_init=NULL,maxiter_HPCA=100,m
 
   if(Method=="E"){
     if(is.null(L_init) & is.null(F_init)){
-      F_init=PCA(X,r)$Fhat
-      L_init=matrix(0,N,r)
-      for(i in 1:N){
-        L_init[i,]=myrlm(F_init,X[,i],maxiter=maxiter_HLM)$coefficients
-        #L_init[i,]=rlm(F_init,X[,i],maxit=maxiter_HLM)$coefficients
+      
+      L_init=RTS(X,r)$Lhat
+      F_init=matrix(0,T,r)
+      for(t in 1:T){
+        F_init[t,]=myrlm(L_init,X[t,],maxiter=maxiter_HLM)$coefficients
+        #F_init[t,]=rlm(L_init,X[t,],maxit=maxiter_HLM)$coefficients
       }
-      L_init=Fregularize(L_init)
+      F_init=Lregularize(F_init,r)
     }
 
     if(is.null(L_init)){
