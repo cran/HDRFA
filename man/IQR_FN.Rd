@@ -7,8 +7,8 @@ Estimating Factor Numbers via Rank Minimization Corresponding to IQR
 This function is to estimate factor numbers via rank minimization corresponding to Iterative Quantile Regression (IQR).
 }
 \usage{
-IQR_FN(X, rmax, tau, threshold = NULL, max_iter = 100, eps = 10^(-6))
-}
+IQR_FN(X, rmax, tau, threshold = NULL, L_init = NULL, F_init = NULL, 
+       max_iter = 100, eps = 10^(-6))}
 \arguments{
   \item{X}{
 Input matrix, of dimension \eqn{T\times N}. Each row is an observation with \eqn{N} features at time point \eqn{t}.
@@ -21,6 +21,12 @@ The user-supplied quantile level.
 }
   \item{threshold}{
 The threshold of rank minimization; default is NULL.
+}
+  \item{L_init}{
+User-supplied inital value of loadings in the IQR; default is the PCA estimator.
+}
+  \item{F_init}{
+User-supplied inital value of factors in the IQR; default is the PCA estimator.
 }
   \item{max_iter}{
 The maximum number of iterations. The default is \eqn{100}.

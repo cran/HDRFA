@@ -25,10 +25,10 @@ A positive integer indicating the factor numbers.
 Optional user-supplied parameter for Huber loss; default is NULL, and \eqn{\tau} is provided by default.
 }
   \item{L_init}{
-User-supplied inital value of loadings; default is NULL.
+User-supplied inital value of loadings; default is the PCA estimator.
 }
   \item{F_init}{
-User-supplied inital value of factors; default is NULL.
+User-supplied inital value of factors; default is the PCA estimator.
 }
   \item{maxiter_HPCA}{
 The maximum number of iterations in the HPCA. The default is \eqn{100}.

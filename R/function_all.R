@@ -3,9 +3,9 @@
 #library("pracma") #gramSchmidt
 
 #HPCA(Method="E");IQR()
-Fregularize <- function(F){
+Fregularize <- function(F,r){
   
-  if(dim(F)[2]>1){
+  if(r>1){
     Freg <- Orthogonalize(F)
   } else{
     Freg <- F/sqrt(sum(F^2))

@@ -7,7 +7,7 @@ Iterative Quantile Regression Methods for Quantile Factor Models
 This function is to fit the quantile factor model via the Iterative Quantile Regression (IQR) algorithm.
 }
 \usage{
-IQR(X, r, tau, max_iter = 100, eps = 10^(-6))
+IQR(X, r, tau, L_init = NULL, F_init = NULL, max_iter = 100, eps = 0.001)
 }
 \arguments{
   \item{X}{
@@ -18,6 +18,12 @@ A positive integer indicating the factor numbers.
 }
   \item{tau}{
 The user-supplied quantile level.
+}  
+  \item{L_init}{
+User-supplied inital value of loadings; default is the PCA estimator.
+}
+  \item{F_init}{
+User-supplied inital value of factors; default is the PCA estimator.
 }
   \item{max_iter}{
 The maximum number of iterations. The default is \eqn{100}.

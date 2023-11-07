@@ -7,8 +7,8 @@ Estimating Factor Numbers via Rank Minimization Corresponding to Huber PCA
 This function is to estimate factor numbers via rank minimization corresponding to Huber Principal Component Analysis (HPCA).
 }
 \usage{
-HPCA_FN(X, rmax, Method = "E", threshold = NULL, maxiter_HPCA = 100, 
-        maxiter_HLM = 100, eps = 0.001)
+HPCA_FN(X, rmax, Method = "E", threshold = NULL, L_init = NULL, F_init = NULL, 
+        maxiter_HPCA = 100, maxiter_HLM = 100, eps = 0.001)
 }
 \arguments{
   \item{X}{
@@ -22,6 +22,12 @@ The user-supplied maximum factor numbers.
 }
   \item{threshold}{
 The threshold of rank minimization; default is NULL.
+} 
+  \item{L_init}{
+User-supplied inital value of loadings in the HPCA; default is the PCA estimator.
+}
+  \item{F_init}{
+User-supplied inital value of factors in the HPCA; default is the PCA estimator.
 }
   \item{maxiter_HPCA}{
 The maximum number of iterations in the HPCA. The default is \eqn{100}.

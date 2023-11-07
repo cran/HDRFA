@@ -1,48 +1,75 @@
-IQR <- function(X,r,tau,max_iter=100,eps=10^(-6))#X n*p T*N  n=T, p=N
+IQR <- function(X,r,tau,L_init=NULL,F_init=NULL,max_iter=100,eps=0.001)
 {
-  p <- ncol(X)
-  n <- nrow(X)
-  L0hat <- matrix(0,p,r)#p*r
-  F0hat=matrix(rnorm(n*r,0,1),n,r)
-  #F0hat <- PCA(X,r,constraint="F")$Fhat #the PCA estimator
-  F0hat <- Fregularize(F0hat)
-  for (i in 1:p){
-    L0hat[i,] <- rq(X[,i]~F0hat-1,tau=tau)$coefficients
+  dimen=dim(X)
+  T=dimen[1];N=dimen[2]
+  
+  if(is.null(L_init) & is.null(F_init)){
+    
+    F_init=PCA(t(X),r)$Lhat
+    L_init=matrix(0,N,r)
+    for (i in 1:N){
+      L_init[i,] <- rq(X[,i]~F_init-1,tau=tau)$coefficients
+    }
+    L_init <- Lregularize(L_init,r)
   }
-  Lthat <- Lregularize(L0hat,r)
-  Fthat <- F0hat
-
-  t <- 0
-  CCdiff <- 10^6
-  while (((CCdiff>eps)&(t<max_iter))){
-    CC0=Lthat%*%t(Fthat)
-    for (i in 1:n){
-      Fthat[i,] <- rq(X[i,]~Lthat-1,tau=tau)$coefficients
+  
+  if(is.null(L_init)){
+  
+    L_init=matrix(0,N,r)
+    for (i in 1:N){
+      L_init[i,] <- rq(X[,i]~F_init-1,tau=tau)$coefficients
     }
-    Fthat <- Fregularize(Fthat)
-    for (i in 1:p){
-      Lthat[i,] <- rq(X[,i]~Fthat-1,tau=tau)$coefficients
+    L_init=Lregularize(L_init,r)
+  }
+  
+  if(is.null(F_init)){
+    F_init=matrix(0,T,r)
+    for (t in 1:T){
+      F_init[t,] <- rq(X[t,]~L_init-1,tau=tau)$coefficients
     }
-    Lthat <- Lregularize(Lthat,r)
-    CC1=Lthat%*%t(Fthat)
-    CCdiff=mean(abs(CC1-CC0)/abs(CC0))
-    t <- t+1
-    if (t==max_iter){
+    F_init=Fregularize(F_init,r)
+  }
+  
+  CC_init=F_init%*%t(L_init)
+  F_update=as.matrix(F_init);L_update=as.matrix(L_init);m=0
+  
+  while(TRUE){
+    
+    for (t in 1:T){
+      F_update[t,]=rq(X[t,]~L_init-1,tau=tau)$coefficients
+    }
+    F_update=Fregularize(F_update,r)
+    
+    for (i in 1:N){
+      L_update[i,]=rq(X[,i]~F_update-1,tau=tau)$coefficients
+    }
+    L_update=Lregularize(L_update,r)
+    
+    CC_update=F_update%*%t(L_update)
+    
+    if(m>=max_iter){
       warning(gettextf("'IQR' failed to converge in %d steps", max_iter))
-      
-       Fthat=Fthat*sqrt(n);Lthat=Lthat/sqrt(n)
-       return(list(Fhat=Fthat,Lhat=Lthat,t=t))
+      F_update=F_update*sqrt(T);L_update=L_update/sqrt(T)
+      return(list(Fhat=F_update,Lhat=L_update,iter=m))
     }
+    
+    if(SC(CC_update,CC_init,eps)){
+      F_update=F_update*sqrt(T);L_update=L_update/sqrt(T)
+      return(list(Fhat=F_update,Lhat=L_update,iter=m))
+    } else{
+      L_init=L_update
+      F_init=F_update
+      CC_init=CC_update
+    }
+    m=m+1
   }
-  Fthat=Fthat*sqrt(n);Lthat=Lthat/sqrt(n)
-  return(list(Fhat=Fthat,Lhat=Lthat,t=t))
 }
 
-IQR_FN<-function(X,rmax,tau,threshold=NULL,max_iter=100,eps=10^(-6)){
+IQR_FN<-function(X,rmax,tau,threshold=NULL,L_init=NULL,F_init=NULL,max_iter=100,eps=10^(-6)){
 
   N <- ncol(X)
   T <- nrow(X)
-  rip <- IQR(X,rmax,tau,max_iter=max_iter,eps=eps)
+  rip <- IQR(X,rmax,tau,L_init=L_init,F_init=F_init,max_iter=max_iter,eps=eps)
   Lhat <- rip$Lhat
   VK <- sort(diag((t(Lhat )%*%Lhat )/N),decreasing=TRUE)
   if(is.null(threshold)){
