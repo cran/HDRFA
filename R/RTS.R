@@ -22,7 +22,7 @@ RTS <- function(X,r){
   for (i in 1:n){
     Fhat[i,] <- lm(X[i,]~Lhat-1)$coefficients
   }
-  return(list(Fhat=Fhat,Lhat=Lhat))
+  return(list(Fhat=as.matrix(Fhat),Lhat=as.matrix(Lhat)))
 }
 
 RTS_FN <- function(X,rmax){

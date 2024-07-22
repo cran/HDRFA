@@ -6,13 +6,13 @@ PCA=function(X,r,constraint="L"){
   if(constraint=="L"){
     Lhat=sqrt(p)*X_svd$v[,1:r]
     Fhat=X%*%Lhat/p
-    return(list(Fhat=Fhat,Lhat=Lhat))
+    return(list(Fhat=as.matrix(Fhat),Lhat=as.matrix(Lhat)))
   }
 
   if(constraint=="F"){
     Fhat=sqrt(n)*X_svd$u[,1:r]
     Lhat=t(X)%*%Fhat/n
-    return(list(Fhat=Fhat,Lhat=Lhat))
+    return(list(Fhat=as.matrix(Fhat),Lhat=as.matrix(Lhat)))
   }
 }
 

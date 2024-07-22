@@ -5,12 +5,8 @@ IQR <- function(X,r,tau,L_init=NULL,F_init=NULL,max_iter=100,eps=0.001)
   
   if(is.null(L_init) & is.null(F_init)){
     
-    F_init=PCA(t(X),r)$Lhat
-    L_init=matrix(0,N,r)
-    for (i in 1:N){
-      L_init[i,] <- rq(X[,i]~F_init-1,tau=tau)$coefficients
-    }
-    L_init <- Lregularize(L_init,r)
+    fit_init=PCA(t(X),r)
+    F_init=fit_init$Lhat;L_init=fit_init$Fhat
   }
   
   if(is.null(L_init)){
@@ -19,7 +15,8 @@ IQR <- function(X,r,tau,L_init=NULL,F_init=NULL,max_iter=100,eps=0.001)
     for (i in 1:N){
       L_init[i,] <- rq(X[,i]~F_init-1,tau=tau)$coefficients
     }
-    L_init=Lregularize(L_init,r)
+    
+    FLR_fit=FLregularize(F_init,L_init,T,N,r);L_init=FLR_fit$Fhat;F_init=FLR_fit$Lhat
   }
   
   if(is.null(F_init)){
@@ -27,35 +24,33 @@ IQR <- function(X,r,tau,L_init=NULL,F_init=NULL,max_iter=100,eps=0.001)
     for (t in 1:T){
       F_init[t,] <- rq(X[t,]~L_init-1,tau=tau)$coefficients
     }
-    F_init=Fregularize(F_init,r)
+    FLR_fit=FLregularize(F_init,L_init,T,N,r);L_init=FLR_fit$Fhat;F_init=FLR_fit$Lhat
   }
   
   CC_init=F_init%*%t(L_init)
-  F_update=as.matrix(F_init);L_update=as.matrix(L_init);m=0
+  F_update=F_init;L_update=L_init;m=0
   
   while(TRUE){
     
     for (t in 1:T){
       F_update[t,]=rq(X[t,]~L_init-1,tau=tau)$coefficients
     }
-    F_update=Fregularize(F_update,r)
     
     for (i in 1:N){
       L_update[i,]=rq(X[,i]~F_update-1,tau=tau)$coefficients
     }
-    L_update=Lregularize(L_update,r)
-    
     CC_update=F_update%*%t(L_update)
     
     if(m>=max_iter){
       warning(gettextf("'IQR' failed to converge in %d steps", max_iter))
-      F_update=F_update*sqrt(T);L_update=L_update/sqrt(T)
-      return(list(Fhat=F_update,Lhat=L_update,iter=m))
+      
+      FLR_fit=FLregularize(F_update,L_update,T,N,r);L_update=FLR_fit$Fhat;F_update=FLR_fit$Lhat
+      return(list(Fhat=as.matrix(F_update),Lhat=as.matrix(L_update),iter=m))
     }
     
     if(SC(CC_update,CC_init,eps)){
-      F_update=F_update*sqrt(T);L_update=L_update/sqrt(T)
-      return(list(Fhat=F_update,Lhat=L_update,iter=m))
+      FLR_fit=FLregularize(F_update,L_update,T,N,r);L_update=FLR_fit$Fhat;F_update=FLR_fit$Lhat
+      return(list(Fhat=as.matrix(F_update),Lhat=as.matrix(L_update),iter=m))
     } else{
       L_init=L_update
       F_init=F_update

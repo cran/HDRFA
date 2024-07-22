@@ -4,12 +4,11 @@
 Huber Principal Component Analysis for Large-Dimensional Factor Models
 }
 \description{
-This function is to fit the factor models via the Huber Principal Component Analysis (HPCA) method. One is based on minimizing the Huber loss of the idiosyncratic error's \eqn{\ell_2}{L2} norm, which turns out to do Principal Component Analysis (PCA) on the weighted sample covariance matrix and thereby named as Huber PCA. The other one is based on minimizing the elementwise
-Huber loss, which can be solved by an iterative Huber regression algorithm.}
+This function is to fit the factor models via the Huber Principal Component Analysis (HPCA) method. One is based on minimizing the Huber loss of the idiosyncratic error's \eqn{\ell_2}{L2} norm, which turns out to do Principal Component Analysis (PCA) on the weighted sample covariance matrix and thereby named as Huber PCA. The other one is based on minimizing the elementwise Huber loss, which can be solved by an iterative Huber regression algorithm.}
 
 \usage{
-HPCA(X, r, Method = "E", tau = NULL, L_init = NULL, F_init = NULL, 
-     maxiter_HPCA = 100, maxiter_HLM = 100, eps = 0.001)
+HPCA(X, r, Method = "E", tau = NULL, scale_est="MAD", L_init = NULL, 
+     F_init = NULL, maxiter_HPCA = 100, maxiter_HLM = 100, eps = 0.001)
 }
 \arguments{
   \item{X}{
@@ -17,12 +16,15 @@ Input matrix, of dimension \eqn{T\times N}. Each row is an observation with \eqn
 }
   \item{r}{
 A positive integer indicating the factor numbers.
-}
+} 
   \item{Method}{
 \code{Method="P"} indicates minimizing the Huber loss of the idiosyncratic error's \eqn{\ell_2} norm while \code{Method="E"} indicates minimizing the elementwise Huber loss. The default is the elementwise Huber loss.
 }
   \item{tau}{
 Optional user-supplied parameter for Huber loss; default is NULL, and \eqn{\tau} is provided by default.
+}
+  \item{scale_est}{
+A parameter for the elementwise Huber loss. \code{scale_est="MAD"} indicates robust variance estimation in each iteration, while \code{scale_est="const"} indicates fixing user-supplied \eqn{\tau}. The default is \code{scale_est="MAD"}.
 }
   \item{L_init}{
 User-supplied inital value of loadings; default is the PCA estimator.

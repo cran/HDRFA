@@ -7,8 +7,9 @@ Estimating Factor Numbers via Rank Minimization Corresponding to Huber PCA
 This function is to estimate factor numbers via rank minimization corresponding to Huber Principal Component Analysis (HPCA).
 }
 \usage{
-HPCA_FN(X, rmax, Method = "E", threshold = NULL, L_init = NULL, F_init = NULL, 
-        maxiter_HPCA = 100, maxiter_HLM = 100, eps = 0.001)
+HPCA_FN(X, rmax, Method = "E", tau = NULL, scale_est="MAD", threshold = NULL,
+        L_init = NULL, F_init = NULL, maxiter_HPCA = 100, maxiter_HLM = 100, 
+        eps = 0.001)
 }
 \arguments{
   \item{X}{
@@ -19,6 +20,12 @@ The user-supplied maximum factor numbers.
 }
   \item{Method}{
 \code{Method="P"} indicates minimizing the Huber loss of the idiosyncratic error's \eqn{\ell_2} norm while \code{Method="E"} indicates minimizing the elementwise Huber loss. The default is the elementwise Huber loss.
+}
+  \item{tau}{
+Optional user-supplied parameter for Huber loss; default is NULL, and \eqn{\tau} is provided by default.
+}
+  \item{scale_est}{
+A parameter for the elementwise Huber loss. \code{scale_est="MAD"} indicates robust variance estimation in each iteration, while \code{scale_est="const"} indicates fixing user-supplied \eqn{\tau}. The default is \code{scale_est="MAD"}.
 }
   \item{threshold}{
 The threshold of rank minimization; default is NULL.

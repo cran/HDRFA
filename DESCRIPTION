@@ -1,7 +1,7 @@
 Package: HDRFA
 Type: Package
 Title: High-Dimensional Robust Factor Analysis
-Version: 0.1.4
+Version: 0.1.5
 Authors@R: c(person("Yong", "He", role=c("aut")),
        person("Lingxiao", "Li", role=c("aut")),
        person("Dong", "Liu", role=c("aut", "cre"), email = "liudong_stat@163.com"),
@@ -17,6 +17,6 @@ Encoding: UTF-8
 Imports: quantreg, pracma
 Depends: R (>= 3.5.0)
 NeedsCompilation: no
-Packaged: 2023-10-17 08:25:44 UTC; S4
+Packaged: 2024-07-22 04:20:32 UTC; hey12
 Repository: CRAN
-Date/Publication: 2023-11-07 12:30:02 UTC
+Date/Publication: 2024-07-22 04:50:02 UTC

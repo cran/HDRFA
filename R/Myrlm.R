@@ -38,6 +38,10 @@ Robust_sigma=function(x,type="MAD"){
   if(type=="MAD"){
     sigmahat=median(abs(x))/0.6745
   }
+  
+  if(type=="const"){
+    sigmahat=1
+  }
   return(sigmahat)
 }
 
